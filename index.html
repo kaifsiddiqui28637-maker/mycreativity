@@ -1,6 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init("p_rSYTncR2-Bn-tZv");</script>
+   function submitOrder() {
+  const name = document.getElementById('o_name').value.trim();
+  const phone = document.getElementById('o_phone').value.trim();
+  const address = document.getElementById('o_address').value.trim();
+  if(!phone) { showToast('⚠️ Phone number zaroori hai!'); return; }
+
+  const items = cart.map(i => `${i.name} x${i.qty} = Rs.${i.price*i.qty}`).join('\n');
+  const total = cart.reduce((s,i) => s+i.price*i.qty, 0);
+  const payment = document.getElementById('o_payment').value;
+  emailjs.send("service_rfq6mgi", "template_7fh5n4r", {
+    customer_name: name || 'Not provided',
+    customer_phone: phone,
+    customer_address: address || 'Not provided',
+    order_items: items,
+    order_total: 'Rs.' + total,
+    payment_method: payment === 'cod' ? 'Cash on Delivery' : 'Online Payment',
+    order_note: document.getElementById('o_note').value || 'None'
+  }).then(() => {
+    showToast('🎉 Order placed! Email sent successfully.');
+  }).catch((err) => {
+    showToast('⚠️ Email failed, please WhatsApp karo.');
+    console.error(err);
+  });
+
+  whatsappOrder();
+  closeModal();
+  cart = [];
+  updateCart();
+}
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Al Baik Xpress – Deoband</title>
