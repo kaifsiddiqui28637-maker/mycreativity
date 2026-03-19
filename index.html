@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Al Baik Xpress – Deoband</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --red:#c8102e;
+  --red-dark:#9b0c22;
+  --red-light:#e8213f;
+  --gold:#f5c518;
+  --gold-dark:#c9a010;
+  --black:#0d0d0d;
+  --dark:#1a1a1a;
+  --card:#222;
+  --text:#f0ede8;
+  --muted:#aaa;
+  --white:#fff;
+  --radius:14px;
+  --shadow:0 8px 32px rgba(0,0,0,.45);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Poppins',sans-serif;background:var(--black);color:var(--text);overflow-x:hidden;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--dark);}
+::-webkit-scrollbar-thumb{background:var(--red);border-radius:3px;}
+
+/* ===== NAV ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(13,13,13,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(200,16,46,.3);padding:0 5%;}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logo img{height:46px;width:46px;object-fit:contain;border-radius:50%;border:2px solid var(--gold);}
+.nav-logo span{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--white);letter-spacing:2px;}
+.nav-logo small{font-size:.65rem;color:var(--gold);display:block;letter-spacing:3px;margin-top:-6px;}
+.nav-links{display:flex;gap:8px;list-style:none;align-items:center;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:500;padding:6px 14px;border-radius:20px;transition:.25s;letter-spacing:.5px;}
+.nav-links a:hover,.nav-links a.active{color:var(--white);background:var(--red);}
+.cart-btn{background:var(--gold);color:var(--black);border:none;padding:8px 18px;border-radius:20px;font-weight:700;font-size:.82rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:.2s;}
+.cart-btn:hover{background:var(--gold-dark);}
+.cart-count{background:var(--red);color:#fff;border-radius:50%;width:18px;height:18px;font-size:.65rem;display:inline-flex;align-items:center;justify-content:center;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;}
+.hamburger span{width:24px;height:2px;background:var(--white);border-radius:2px;transition:.3s;}
+
+/* ===== PAGES ===== */
+.page{display:none;min-height:100vh;padding-top:68px;}
+.page.active{display:block;}
+
+/* ===== HERO SLIDER ===== */
+.hero{position:relative;height:calc(100vh - 68px);overflow:hidden;}
+.slides{display:flex;transition:transform .8s cubic-bezier(.77,0,.18,1);}
+.slide{min-width:100%;height:calc(100vh - 68px);position:relative;overflow:hidden;}
+.slide-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(.42);transform:scale(1.08);transition:transform 3.2s ease-out;}
+.slide.active-slide .slide-bg{transform:scale(1);}
+@keyframes kbzoom{from{transform:scale(1.1);}to{transform:scale(1);}}
+.slide.active-slide .slide-bg{animation:kbzoom 6s ease-out forwards;}
+
+/* Real restaurant & food images */
+.slide1-bg{background-image:url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1600&q=85');background-position:center 40%;}
+.slide2-bg{background-image:url('https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=1600&q=85');background-position:center 55%;}
+.slide3-bg{background-image:url('https://images.unsplash.com/photo-1616645258469-ec681c17f3ee?w=1600&q=85');background-position:center 50%;}
+.slide4-bg{background-image:url('https://images.unsplash.com/photo-1514190051997-0f6f39ca5cde?w=1600&q=85');background-position:center 45%;}
+
+/* Progress bar under slide */
+.slide-progress{position:absolute;bottom:0;left:0;height:3px;background:var(--gold);z-index:10;width:0;transition:width linear;}
+.slide-progress.running{width:100%;}
+.slide-content{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 20px;}
+.slide-badge{background:var(--gold);color:var(--black);font-size:.72rem;font-weight:700;padding:4px 14px;border-radius:20px;letter-spacing:2px;margin-bottom:18px;text-transform:uppercase;}
+.slide-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,9vw,7rem);line-height:1;color:var(--white);text-shadow:0 4px 20px rgba(0,0,0,.6);}
+.slide-title span{color:var(--gold);}
+.slide-sub{font-size:clamp(.9rem,2vw,1.1rem);color:rgba(255,255,255,.8);margin:12px 0 28px;max-width:480px;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+.btn-primary{background:var(--red);color:#fff;border:none;padding:13px 30px;border-radius:8px;font-weight:700;font-size:.95rem;cursor:pointer;transition:.2s;letter-spacing:.5px;}
+.btn-primary:hover{background:var(--red-light);transform:translateY(-2px);}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.5);padding:13px 30px;border-radius:8px;font-weight:600;font-size:.95rem;cursor:pointer;transition:.2s;}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.slide-dots{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:5;}
+.dot{width:8px;height:8px;border-radius:4px;background:rgba(255,255,255,.4);cursor:pointer;transition:.3s;}
+.dot.active{width:24px;background:var(--gold);}
+.slide-arrows{position:absolute;top:50%;transform:translateY(-50%);width:100%;display:flex;justify-content:space-between;padding:0 20px;z-index:5;}
+.arrow-btn{background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:#fff;width:46px;height:46px;border-radius:50%;font-size:1.2rem;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;}
+.arrow-btn:hover{background:var(--red);border-color:var(--red);}
+
+/* ===== SECTION COMMON ===== */
+.section{padding:80px 5%;}
+.section-header{text-align:center;margin-bottom:50px;}
+.section-tag{color:var(--gold);font-size:.75rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3.2rem);color:var(--white);letter-spacing:2px;}
+.section-title span{color:var(--red);}
+.section-line{width:60px;height:3px;background:linear-gradient(90deg,var(--red),var(--gold));margin:12px auto 0;border-radius:2px;}
+
+/* ===== FEATURES STRIP ===== */
+.features-strip{background:var(--red);padding:20px 5%;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.feat-item{display:flex;align-items:center;gap:12px;color:#fff;}
+.feat-icon{font-size:1.6rem;}
+.feat-text strong{display:block;font-size:.9rem;font-weight:700;}
+.feat-text span{font-size:.75rem;opacity:.85;}
+
+/* ===== MENU PAGE ===== */
+.menu-filter{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:40px;}
+.filter-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:var(--muted);padding:8px 20px;border-radius:25px;cursor:pointer;font-size:.82rem;font-weight:500;transition:.2s;}
+.filter-btn:hover,.filter-btn.active{background:var(--red);border-color:var(--red);color:#fff;}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px;}
+.menu-card{background:var(--card);border-radius:var(--radius);overflow:hidden;border:1px solid rgba(255,255,255,.06);transition:.3s;position:relative;}
+.menu-card:hover{transform:translateY(-4px);box-shadow:var(--shadow),0 0 0 1px rgba(200,16,46,.3);}
+.menu-card-img{height:180px;background-size:cover;background-position:center;position:relative;}
+.veg-badge{position:absolute;top:10px;left:10px;width:18px;height:18px;border:2px solid;border-radius:3px;display:flex;align-items:center;justify-content:center;}
+.veg-badge.veg{border-color:#27ae60;} .veg-badge.veg::after{content:'';width:8px;height:8px;background:#27ae60;border-radius:50%;}
+.veg-badge.nonveg{border-color:var(--red);} .veg-badge.nonveg::after{content:'';width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:8px solid var(--red);}
+.menu-card-body{padding:16px;}
+.menu-card-body h3{font-size:.95rem;font-weight:600;color:var(--white);margin-bottom:4px;}
+.menu-card-body p{font-size:.78rem;color:var(--muted);margin-bottom:12px;line-height:1.5;}
+.menu-card-footer{display:flex;align-items:center;justify-content:space-between;}
+.price{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--gold);}
+.add-btn{background:var(--red);color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;transition:.2s;}
+.add-btn:hover{background:var(--red-light);}
+.menu-section-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold);letter-spacing:2px;margin:40px 0 20px;padding-bottom:10px;border-bottom:1px solid rgba(245,197,24,.2);display:flex;align-items:center;gap:10px;}
+.menu-section-title::before{content:'';width:4px;height:28px;background:var(--red);border-radius:2px;}
+
+/* ===== ORDER PAGE ===== */
+.order-layout{display:grid;grid-template-columns:1fr 380px;gap:30px;align-items:start;}
+.order-items-section h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--white);margin-bottom:24px;letter-spacing:2px;}
+.order-menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;}
+.order-card{background:var(--card);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.06);display:flex;gap:14px;align-items:center;transition:.2s;cursor:pointer;}
+.order-card:hover{border-color:rgba(200,16,46,.4);background:#2a2a2a;}
+.order-card-img{width:70px;height:70px;border-radius:10px;object-fit:cover;background:var(--dark);}
+.order-card-info{flex:1;}
+.order-card-info h4{font-size:.88rem;font-weight:600;color:var(--white);}
+.order-card-info span{font-size:.78rem;color:var(--muted);}
+.order-card-price{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold);}
+.order-card .add-btn{margin-top:6px;padding:5px 12px;font-size:.75rem;}
+
+/* CART */
+.cart-panel{background:var(--card);border-radius:var(--radius);border:1px solid rgba(255,255,255,.08);position:sticky;top:88px;overflow:hidden;}
+.cart-header{background:var(--red);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;}
+.cart-header h3{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:#fff;letter-spacing:1px;}
+.cart-items{padding:16px;max-height:380px;overflow-y:auto;}
+.cart-empty{text-align:center;padding:40px 20px;color:var(--muted);}
+.cart-empty .empty-icon{font-size:3rem;margin-bottom:12px;}
+.cart-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.cart-item-info{flex:1;}
+.cart-item-info h5{font-size:.82rem;font-weight:600;color:var(--white);}
+.cart-item-info span{font-size:.75rem;color:var(--muted);}
+.qty-ctrl{display:flex;align-items:center;gap:6px;}
+.qty-btn{background:rgba(255,255,255,.1);border:none;color:#fff;width:24px;height:24px;border-radius:6px;cursor:pointer;font-size:.9rem;transition:.2s;}
+.qty-btn:hover{background:var(--red);}
+.qty-num{font-size:.85rem;font-weight:600;min-width:20px;text-align:center;}
+.cart-item-price{font-weight:700;color:var(--gold);font-size:.85rem;}
+.cart-summary{padding:16px 20px;border-top:1px solid rgba(255,255,255,.08);}
+.summary-row{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);margin-bottom:8px;}
+.summary-row.total{color:var(--white);font-weight:700;font-size:1rem;border-top:1px solid rgba(255,255,255,.1);padding-top:10px;margin-top:4px;}
+.payment-options{padding:0 20px 20px;}
+.payment-options h4{font-size:.85rem;font-weight:600;color:var(--white);margin-bottom:10px;}
+.pay-radio{display:flex;gap:10px;margin-bottom:16px;}
+.pay-opt{flex:1;padding:10px;border-radius:10px;border:2px solid rgba(255,255,255,.1);cursor:pointer;text-align:center;font-size:.78rem;font-weight:600;color:var(--muted);transition:.2s;}
+.pay-opt.selected{border-color:var(--gold);color:var(--gold);background:rgba(245,197,24,.08);}
+.checkout-btn{width:100%;background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;border:none;padding:14px;border-radius:10px;font-weight:700;font-size:.95rem;cursor:pointer;transition:.2s;letter-spacing:.5px;}
+.checkout-btn:hover{background:linear-gradient(135deg,var(--red-light),var(--red));}
+
+/* ===== ORDER MODAL ===== */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;backdrop-filter:blur(6px);align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--dark);border-radius:20px;padding:32px;width:90%;max-width:480px;border:1px solid rgba(255,255,255,.1);position:relative;max-height:90vh;overflow-y:auto;}
+.modal-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.1);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;}
+.modal h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--white);margin-bottom:6px;}
+.modal p{font-size:.82rem;color:var(--muted);margin-bottom:24px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase;}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:var(--white);padding:11px 14px;border-radius:10px;font-size:.88rem;font-family:'Poppins',sans-serif;transition:.2s;outline:none;}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--red);background:rgba(255,255,255,.09);}
+.form-group textarea{resize:vertical;min-height:80px;}
+.form-group select option{background:var(--dark);}
+.order-item-summary{background:rgba(255,255,255,.05);border-radius:10px;padding:12px;margin-bottom:20px;font-size:.82rem;color:var(--muted);}
+.order-item-summary .item-line{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.order-item-summary .item-line:last-child{border:none;color:var(--gold);font-weight:700;}
+.submit-order-btn{width:100%;background:linear-gradient(135deg,var(--red),#e82040);color:#fff;border:none;padding:14px;border-radius:12px;font-weight:700;font-size:1rem;cursor:pointer;transition:.2s;}
+.submit-order-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(200,16,46,.4);}
+.whatsapp-btn{width:100%;background:#25d366;color:#fff;border:none;padding:12px;border-radius:12px;font-weight:700;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;transition:.2s;}
+.whatsapp-btn:hover{background:#1ebe59;}
+
+/* ===== CONTACT ===== */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;}
+.contact-info h2{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--white);letter-spacing:2px;margin-bottom:16px;}
+.contact-info p{color:var(--muted);line-height:1.7;margin-bottom:28px;}
+.info-item{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;}
+.info-icon{background:var(--red);width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.info-text strong{display:block;font-size:.88rem;font-weight:700;color:var(--white);margin-bottom:2px;}
+.info-text span{font-size:.82rem;color:var(--muted);}
+.contact-form-box{background:var(--card);border-radius:20px;padding:32px;border:1px solid rgba(255,255,255,.07);}
+.contact-form-box h3{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--white);margin-bottom:6px;letter-spacing:1px;}
+.contact-form-box p{font-size:.82rem;color:var(--muted);margin-bottom:24px;}
+.social-strip{display:flex;gap:12px;margin-top:28px;}
+.social-btn{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1rem;transition:.2s;}
+.social-btn:hover{transform:scale(1.1);}
+.social-btn.wa{background:#25d366;color:#fff;}
+.social-btn.ig{background:linear-gradient(135deg,#f58529,#dd2a7b,#515bd4);color:#fff;}
+.social-btn.fb{background:#1877f2;color:#fff;}
+
+/* ===== BLOG ===== */
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;}
+.blog-card{background:var(--card);border-radius:var(--radius);overflow:hidden;border:1px solid rgba(255,255,255,.06);transition:.3s;}
+.blog-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);}
+.blog-card-img{height:200px;background-size:cover;background-position:center;}
+.blog-card-body{padding:20px;}
+.blog-tag{background:rgba(200,16,46,.2);color:var(--red-light);font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:12px;letter-spacing:1px;text-transform:uppercase;}
+.blog-card-body h3{font-size:1rem;font-weight:700;color:var(--white);margin:10px 0 8px;line-height:1.4;}
+.blog-card-body p{font-size:.8rem;color:var(--muted);line-height:1.6;margin-bottom:14px;}
+.blog-meta{display:flex;align-items:center;justify-content:space-between;font-size:.75rem;color:var(--muted);}
+.blog-read-btn{color:var(--gold);font-weight:600;cursor:pointer;text-decoration:none;font-size:.8rem;}
+
+/* ===== SPECIALS / COMBOS ===== */
+.combos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;}
+.combo-card{background:linear-gradient(135deg,#1e1e1e,#2a1010);border-radius:var(--radius);padding:24px;border:1px solid rgba(200,16,46,.25);position:relative;overflow:hidden;}
+.combo-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:rgba(200,16,46,.1);}
+.combo-badge{background:var(--gold);color:var(--black);font-size:.68rem;font-weight:800;padding:3px 10px;border-radius:4px;letter-spacing:1px;text-transform:uppercase;display:inline-block;margin-bottom:12px;}
+.combo-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--white);letter-spacing:1px;margin-bottom:8px;}
+.combo-items{list-style:none;margin-bottom:16px;}
+.combo-items li{font-size:.8rem;color:var(--muted);padding:3px 0;display:flex;align-items:center;gap:6px;}
+.combo-items li::before{content:'✦';color:var(--gold);font-size:.55rem;}
+.combo-footer{display:flex;align-items:center;justify-content:space-between;}
+.combo-price{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold);}
+.combo-price span{font-size:1rem;text-decoration:line-through;color:var(--muted);margin-left:8px;}
+
+/* ===== FOOTER ===== */
+footer{background:#0a0a0a;border-top:1px solid rgba(255,255,255,.06);padding:60px 5% 30px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand img{height:50px;margin-bottom:14px;}
+.footer-brand p{font-size:.82rem;color:var(--muted);line-height:1.7;margin-bottom:16px;}
+.footer-col h4{font-size:.88rem;font-weight:700;color:var(--white);margin-bottom:16px;letter-spacing:.5px;}
+.footer-col ul{list-style:none;}
+.footer-col li{margin-bottom:10px;}
+.footer-col a{font-size:.82rem;color:var(--muted);text-decoration:none;transition:.2s;}
+.footer-col a:hover{color:var(--gold);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:gap;}
+.footer-bottom p{font-size:.78rem;color:var(--muted);}
+
+/* ===== TOAST ===== */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--dark);border:1px solid rgba(255,255,255,.1);color:var(--white);padding:14px 20px;border-radius:12px;font-size:.85rem;z-index:9999;transform:translateY(100px);opacity:0;transition:.3s;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow);}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast-icon{font-size:1.1rem;}
+
+/* ===== SUCCESS MSG ===== */
+.success-msg{text-align:center;padding:40px 20px;}
+.success-msg .check{font-size:3.5rem;margin-bottom:16px;}
+.success-msg h3{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--white);margin-bottom:8px;}
+.success-msg p{color:var(--muted);font-size:.9rem;}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .order-layout{grid-template-columns:1fr;}
+  .contact-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+  .features-strip{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:600px){
+  .nav-links{display:none;position:absolute;top:68px;left:0;right:0;background:var(--dark);flex-direction:column;padding:16px;gap:4px;border-bottom:1px solid rgba(255,255,255,.1);}
+  .nav-links.open{display:flex;}
+  .hamburger{display:flex;}
+  .features-strip{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr;}
+  .slide-title{font-size:3rem;}
+  .pay-radio{flex-direction:column;}
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+.fade-up{animation:fadeUp .6s ease forwards;}
+.fade-up-2{animation:fadeUp .6s .15s ease both;}
+.fade-up-3{animation:fadeUp .6s .3s ease both;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <div style="width:46px;height:46px;border-radius:50%;background:#c8102e;border:2px solid #f5c518;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <svg viewBox="0 0 60 60" width="38" height="38"><circle cx="30" cy="30" r="28" fill="#c8102e"/><path d="M30 8 C30 8 38 16 38 24 C38 28 36 31 33 33 L33 42 L27 42 L27 33 C24 31 22 28 22 24 C22 16 30 8 30 8Z" fill="white" opacity=".9"/><path d="M26 44 L34 44 L32 52 L28 52Z" fill="white" opacity=".7"/><ellipse cx="30" cy="24" rx="4" ry="6" fill="#f5c518"/></svg>
+      </div>
+      <div>
+        <span>AL BAIK XPRESS</span>
+        <small>DEOBAND • EST. 2018</small>
+      </div>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#" class="active" onclick="showPage('home',this)">Home</a></li>
+      <li><a href="#" onclick="showPage('menu',this)">Menu</a></li>
+      <li><a href="#" onclick="showPage('order',this)">Order Now</a></li>
+      <li><a href="#" onclick="showPage('blog',this)">Blog</a></li>
+      <li><a href="#" onclick="showPage('contact',this)">Contact</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="cart-btn" onclick="showPage('order',null);document.querySelector('.cart-panel').scrollIntoView({behavior:'smooth'})">
+        🛒 Cart <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <div class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== HOME PAGE ========== -->
+<div class="page active" id="page-home">
+
+  <!-- HERO SLIDER -->
+  <div class="hero">
+    <div class="slides" id="slides">
+      <div class="slide">
+        <div class="slide-bg slide1-bg"></div>
+        <div class="slide-content">
+          <div class="slide-badge fade-up">🏆 Deoband's #1 Fast Food</div>
+          <h1 class="slide-title fade-up-2">CRISPY<br/><span>FRIED CHICKEN</span></h1>
+          <p class="slide-sub fade-up-3">Golden crust, juicy inside — every bite is a celebration</p>
+          <div class="hero-btns fade-up-3">
+            <button class="btn-primary" onclick="showPage('order',null)">Order Now 🔥</button>
+            <button class="btn-outline" onclick="showPage('menu',null)">View Menu</button>
+          </div>
+        </div>
+      </div>
+      <div class="slide">
+        <div class="slide-bg slide2-bg"></div>
+        <div class="slide-content">
+          <div class="slide-badge">🍔 Signature Series</div>
+          <h1 class="slide-title">GOURMET<br/><span>BURGERS</span></h1>
+          <p class="slide-sub">From Zinger to Tower — loaded with flavour, stacked with love</p>
+          <div class="hero-btns">
+            <button class="btn-primary" onclick="showPage('order',null)">Order Now</button>
+            <button class="btn-outline" onclick="showPage('menu',null)">See All Burgers</button>
+          </div>
+        </div>
+      </div>
+      <div class="slide">
+        <div class="slide-bg slide3-bg"></div>
+        <div class="slide-content">
+          <div class="slide-badge">🎁 Combo Deals</div>
+          <h1 class="slide-title">MBO<br/><span>COMBOS</span></h1>
+          <p class="slide-sub">More food, more value — Burger + Fries + Cold Drink starting ₹154</p>
+          <div class="hero-btns">
+            <button class="btn-primary" onclick="showPage('home',null);setTimeout(()=>document.getElementById('combos-section').scrollIntoView({behavior:'smooth'}),100)">See Combos</button>
+            <button class="btn-outline" onclick="showPage('order',null)">Order Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="slide">
+        <div class="slide-bg slide4-bg"></div>
+        <div class="slide-content">
+          <div class="slide-badge">🛵 Free Home Delivery</div>
+          <h1 class="slide-title">FREE<br/><span>DELIVERY</span></h1>
+          <p class="slide-sub">Call us: 9634950165 or 9634950165 — Quick delivery across Deoband</p>
+          <div class="hero-btns">
+            <button class="btn-primary" onclick="window.open('https://wa.me/919634950165','_blank')">WhatsApp Order</button>
+            <button class="btn-outline" onclick="showPage('menu',null)">Browse Menu</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-arrows">
+      <button class="arrow-btn" onclick="changeSlide(-1)">&#8592;</button>
+      <button class="arrow-btn" onclick="changeSlide(1)">&#8594;</button>
+    </div>
+    <div class="slide-dots" id="slideDots"></div>
+    <div class="slide-progress" id="slideProgress"></div>
+  </div>
+
+  <!-- FEATURES STRIP -->
+  <div class="features-strip">
+    <div class="feat-item"><span class="feat-icon">🚀</span><div class="feat-text"><strong>Fast Delivery</strong><span>30–45 mins</span></div></div>
+    <div class="feat-item"><span class="feat-icon">✅</span><div class="feat-text"><strong>100% Halal</strong><span>Certified fresh</span></div></div>
+    <div class="feat-item"><span class="feat-icon">💯</span><div class="feat-text"><strong>Fresh Daily</strong><span>Made to order</span></div></div>
+    <div class="feat-item"><span class="feat-icon">📱</span><div class="feat-text"><strong>Easy Ordering</strong><span>Call or WhatsApp</span></div></div>
+  </div>
+
+  <!-- POPULAR ITEMS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-tag">Most Loved</div>
+      <h2 class="section-title">POPULAR <span>PICKS</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="menu-grid" id="popularGrid"></div>
+    <div style="text-align:center;margin-top:36px;">
+      <button class="btn-primary" onclick="showPage('menu',null)">View Full Menu →</button>
+    </div>
+  </div>
+
+  <!-- COMBOS SECTION -->
+  <div class="section" id="combos-section" style="background:rgba(255,255,255,.02);border-top:1px solid rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.04);">
+    <div class="section-header">
+      <div class="section-tag">Best Value</div>
+      <h2 class="section-title">MBO <span>COMBOS</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="combos-grid" id="combosGrid"></div>
+  </div>
+
+  <!-- ABOUT STRIP -->
+  <div class="section">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;">
+      <div>
+        <div class="section-tag">Our Story</div>
+        <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:var(--white);line-height:1.1;margin-bottom:16px;letter-spacing:2px;">DEOBAND'S FAVOURITE<br/><span style="color:var(--red);">FAST FOOD SPOT</span></h2>
+        <p style="color:var(--muted);line-height:1.8;margin-bottom:16px;font-size:.9rem;">Al Baik Xpress has been serving the people of Deoband with crispy, flavorful fast food since 2018. From our signature Chicken Zinger Burger to our famous Fried Chicken Bucket — every dish is made fresh, every time.</p>
+        <p style="color:var(--muted);line-height:1.8;font-size:.9rem;margin-bottom:24px;">Located near Muslim Fund, Matkota, we offer dine-in, takeaway, and free home delivery. Come hungry, leave happy!</p>
+        <div style="display:flex;gap:30px;margin-bottom:28px;">
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--gold);">500+</div><div style="font-size:.78rem;color:var(--muted);">Daily Orders</div></div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--gold);">4.0★</div><div style="font-size:.78rem;color:var(--muted);">Google Rating</div></div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--gold);">95+</div><div style="font-size:.78rem;color:var(--muted);">Reviews</div></div>
+        </div>
+        <button class="btn-primary" onclick="showPage('contact',null)">Get In Touch</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="background:var(--card);border-radius:16px;overflow:hidden;aspect-ratio:1;background-image:url('https://images.unsplash.com/photo-1626082927389-6cd097cee6a2?w=400&q=80');background-size:cover;grid-row:1/3;"></div>
+        <div style="background:var(--card);border-radius:16px;overflow:hidden;aspect-ratio:1;background-image:url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80');background-size:cover;"></div>
+        <div style="background:var(--card);border-radius:16px;overflow:hidden;aspect-ratio:1;background-image:url('https://images.unsplash.com/photo-1562967914-608f82629710?w=400&q=80');background-size:cover;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <div class="section" style="background:rgba(200,16,46,.04);border-top:1px solid rgba(200,16,46,.1);">
+    <div class="section-header">
+      <div class="section-tag">Customer Love</div>
+      <h2 class="section-title">WHAT PEOPLE <span>SAY</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;">
+      <div style="background:var(--card);border-radius:14px;padding:22px;border:1px solid rgba(255,255,255,.06);">
+        <div style="color:var(--gold);font-size:1.1rem;margin-bottom:10px;">★★★★★</div>
+        <p style="font-size:.85rem;color:var(--muted);line-height:1.7;margin-bottom:14px;font-style:italic;">"So crispy and crunchy chicken dishes! Best fast food in Deoband. I love their Chicken Zinger!"</p>
+        <div style="font-size:.8rem;font-weight:600;color:var(--white);">Mohd Haroon</div>
+        <div style="font-size:.72rem;color:var(--muted);">Local Guide · Google Maps</div>
+      </div>
+      <div style="background:var(--card);border-radius:14px;padding:22px;border:1px solid rgba(255,255,255,.06);">
+        <div style="color:var(--gold);font-size:1.1rem;margin-bottom:10px;">★★★★★</div>
+        <p style="font-size:.85rem;color:var(--muted);line-height:1.7;margin-bottom:14px;font-style:italic;">"Food quality is good, Halal food! Nice location. Home delivery service is available."</p>
+        <div style="font-size:.8rem;font-weight:600;color:var(--white);">Ansari Homoeo</div>
+        <div style="font-size:.72rem;color:var(--muted);">Local Guide · Google Maps</div>
+      </div>
+      <div style="background:var(--card);border-radius:14px;padding:22px;border:1px solid rgba(255,255,255,.06);">
+        <div style="color:var(--gold);font-size:1.1rem;margin-bottom:10px;">★★★★☆</div>
+        <p style="font-size:.85rem;color:var(--muted);line-height:1.7;margin-bottom:14px;font-style:italic;">"Beautiful place with many crispy foods. Chicken fries, sandwich, mojito — all are excellent!"</p>
+        <div style="font-size:.8rem;font-weight:600;color:var(--white);">MD Kismat Hossain</div>
+        <div style="font-size:.72rem;color:var(--muted);">Local Guide · Google Maps</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========== MENU PAGE ========== -->
+<div class="page" id="page-menu">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-tag">Al Baik Xpress</div>
+      <h2 class="section-title">OUR FULL <span>MENU</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="menu-filter" id="menuFilter"></div>
+    <div id="menuContent"></div>
+  </div>
+</div>
+
+<!-- ========== ORDER PAGE ========== -->
+<div class="page" id="page-order">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-tag">Fast & Easy</div>
+      <h2 class="section-title">ORDER <span>NOW</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="order-layout">
+      <div class="order-items-section">
+        <h2>Pick Your Items</h2>
+        <div class="order-menu-grid" id="orderGrid"></div>
+      </div>
+      <div class="cart-panel">
+        <div class="cart-header">
+          <h3>🛒 Your Cart</h3>
+          <button onclick="clearCart()" style="background:rgba(255,255,255,.2);border:none;color:#fff;padding:4px 10px;border-radius:6px;font-size:.75rem;cursor:pointer;">Clear</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+          <div class="cart-empty"><div class="empty-icon">🛒</div><p>Your cart is empty.<br/>Add some delicious items!</p></div>
+        </div>
+        <div class="cart-summary" id="cartSummary" style="display:none;">
+          <div class="summary-row"><span>Subtotal</span><span id="subtotalVal">₹0</span></div>
+          <div class="summary-row"><span>Delivery</span><span style="color:#27ae60;">FREE</span></div>
+          <div class="summary-row total"><span>Total</span><span id="totalVal">₹0</span></div>
+        </div>
+        <div class="payment-options" id="paymentOptions" style="display:none;">
+          <h4>Payment Method</h4>
+          <div class="pay-radio">
+            <div class="pay-opt selected" id="cod" onclick="selectPayment('cod')">💵 Cash on Delivery</div>
+            <div class="pay-opt" id="online" onclick="selectPayment('online')">📱 Online Payment</div>
+          </div>
+          <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== BLOG PAGE ========== -->
+<div class="page" id="page-blog">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-tag">Food Stories</div>
+      <h2 class="section-title">OUR <span>BLOG</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="blog-grid" id="blogGrid"></div>
+  </div>
+</div>
+
+<!-- ========== CONTACT PAGE ========== -->
+<div class="page" id="page-contact">
+  <div class="section">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="section-tag">Get In Touch</div>
+        <h2>REACH<br/><span style="color:var(--red);">US OUT</span></h2>
+        <p>We'd love to hear from you! Whether it's about an order, feedback, or just saying hello — we're here.</p>
+        <div class="info-item"><div class="info-icon">📍</div><div class="info-text"><strong>Our Location</strong><span>Near Muslim Fund, Matkota,<br/>Deoband, Uttar Pradesh 247554</span></div></div>
+        <div class="info-item"><div class="info-icon">📞</div><div class="info-text"><strong>Call / WhatsApp</strong><span>919634950165<br/>93682 52217</span></div></div>
+        <div class="info-item"><div class="info-icon">✉️</div><div class="info-text"><strong>Email Us</strong><span>Kaifsiddiqui28637@gmail.com</span></div></div>
+        <div class="info-item"><div class="info-icon">🕐</div><div class="info-text"><strong>Opening Hours</strong><span>Mon–Sun: 11:00 AM – 11:30 PM</span></div></div>
+        <div class="social-strip">
+          <a class="social-btn wa" href="https://wa.me/919634950165" target="_blank">📱</a>
+          <a class="social-btn ig" href="#" target="_blank">📷</a>
+          <a class="social-btn fb" href="#" target="_blank">f</a>
+        </div>
+      </div>
+      <div>
+        <div class="contact-form-box">
+          <h3>Send Us A Message</h3>
+          <p>Fill the form below and we'll get back to you quickly</p>
+          <div id="contactFormArea">
+            <div class="form-group"><label>Your Name</label><input type="text" id="cf_name" placeholder="e.g. Ahmed Khan"/></div>
+            <div class="form-group"><label>Phone Number</label><input type="tel" id="cf_phone" placeholder="e.g. 9634950165"/></div>
+            <div class="form-group"><label>Email (optional)</label><input type="email" id="cf_email" placeholder="your@email.com"/></div>
+            <div class="form-group"><label>Message</label><textarea id="cf_message" placeholder="Your feedback, query, or message..."></textarea></div>
+            <button class="btn-primary" style="width:100%;padding:13px;" onclick="sendContactForm()">Send Message 📨</button>
+            <button class="whatsapp-btn" onclick="contactWhatsApp(9634950165)">💬 Chat on WhatsApp Instead</button>
+          </div>
+        </div>
+        <!-- MAP -->
+        <div style="margin-top:24px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.08);">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3471.7!2d77.677!3d29.694!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjnCsDQxJzM4LjQiTiA3N8KwNDAnMzcuMiJF!5e0!3m2!1sen!2sin!4v1" width="100%" height="220" style="border:0;display:block;" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== ORDER MODAL ========== -->
+<div class="modal-overlay" id="orderModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2>Complete Your Order</h2>
+    <p>Fill in your details and we'll deliver to you!</p>
+    <div class="order-item-summary" id="modalCartSummary"></div>
+    <div class="form-group"><label>Full Name</label><input type="text" id="o_name" placeholder="Your name"/></div>
+    <div class="form-group"><label>Phone Number *</label><input type="tel" id="o_phone" placeholder="e.g. 9634950165"/></div>
+    <div class="form-group"><label>Delivery Address</label><textarea id="o_address" placeholder="House no, street, area, landmark..."></textarea></div>
+    <div class="form-group"><label>Special Instructions</label><input type="text" id="o_note" placeholder="e.g. Less spicy, extra sauce..."/></div>
+    <div class="form-group"><label>Payment</label>
+      <select id="o_payment">
+        <option value="cod">Cash on Delivery</option>
+        <option value="online">Online Payment (UPI/Card)</option>
+      </select>
+    </div>
+    <button class="submit-order-btn" onclick="submitOrder()">Place Order 🚀</button>
+    <button class="whatsapp-btn" onclick="whatsappOrder()">💬 Order via WhatsApp</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span class="toast-icon">✅</span><span id="toastMsg">Added!</span></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--white);letter-spacing:3px;margin-bottom:8px;">AL BAIK XPRESS</div>
+      <p>Deoband's favourite fast food spot. Serving crispy, delicious, 100% halal food since 2018.</p>
+      <p style="font-size:.78rem;color:var(--muted);">📍 Near Muslim Fund, Matkota, Deoband, UP 247554</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#" onclick="showPage('home',null)">Home</a></li>
+        <li><a href="#" onclick="showPage('menu',null)">Menu</a></li>
+        <li><a href="#" onclick="showPage('order',null)">Order Now</a></li>
+        <li><a href="#" onclick="showPage('blog',null)">Blog</a></li>
+        <li><a href="#" onclick="showPage('contact',null)">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Menu</h4>
+      <ul>
+        <li><a href="#">Burgers</a></li>
+        <li><a href="#">Fried Chicken</a></li>
+        <li><a href="#">Twisters</a></li>
+        <li><a href="#">Pizza</a></li>
+        <li><a href="#">Combos</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:9634950165">📞 9634950165</a></li>
+        <li><a href="tel:9634950165">📞 9634950165</a></li>
+        <li><a href="https://wa.me/919634950165">💬 WhatsApp</a></li>
+        <li><a href="mailto:Kaifsiddiqui28637@gmail.com">✉️ Email Us</a></li>
+        <li><a href="#">📍 Get Directions</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Al Baik Xpress, Deoband. All rights reserved.</p>
+    <p style="color:var(--red);">Made with ❤️ in Deoband</p>
+  </div>
+</footer>
+
+<script>
+// ============================================================
+//  DATA
+// ============================================================
+const menuData = {
+  "Burgers": [
+    {id:1,name:"Chicken Zinger Burger",price:87,veg:false,desc:"Crispy fried chicken, lettuce, mayo in a toasted bun",img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80"},
+    {id:2,name:"Chicken Popcorn Burger",price:100,veg:false,desc:"Popcorn chicken pieces loaded in a burger",img:"https://images.unsplash.com/photo-1603064752734-4c48eff53d05?w=400&q=80"},
+    {id:3,name:"Chicken Cheese Burger",price:100,veg:false,desc:"Extra cheese melted over juicy chicken patty",img:"https://images.unsplash.com/photo-1550547660-d9450f859349?w=400&q=80"},
+    {id:4,name:"Chicken Tandoori Burger",price:100,veg:false,desc:"Tandoori-spiced chicken in a burger",img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80"},
+    {id:5,name:"Peri-Peri Burger",price:100,veg:false,desc:"Spicy peri-peri marinated chicken burger",img:"https://images.unsplash.com/photo-1603064752734-4c48eff53d05?w=400&q=80"},
+    {id:6,name:"Veg Zinger Burger",price:63,veg:true,desc:"Crispy veggie patty with fresh veggies",img:"https://images.unsplash.com/photo-1550547660-d9450f859349?w=400&q=80"},
+    {id:7,name:"Veg Cheese Zinger Burger",price:75,veg:true,desc:"Veg zinger with extra cheese",img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80"},
+    {id:8,name:"Al Baik's Special Burger",price:113,veg:false,desc:"Our signature special loaded burger",img:"https://images.unsplash.com/photo-1603064752734-4c48eff53d05?w=400&q=80"},
+  ],
+  "Crispy Chicken": [
+    {id:9,name:"Fried Chicken (1 pc)",price:75,veg:false,desc:"Golden crispy fried chicken leg piece",img:"https://images.unsplash.com/photo-1626082927389-6cd097cee6a2?w=400&q=80"},
+    {id:10,name:"Leg (1 pc)",price:75,veg:false,desc:"Classic crispy chicken leg piece",img:"https://images.unsplash.com/photo-1626082927389-6cd097cee6a2?w=400&q=80"},
+    {id:11,name:"Wings (4 pcs)",price:150,veg:false,desc:"4 crispy flavourful chicken wings",img:"https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=400&q=80"},
+    {id:12,name:"Lollipop (4 pcs)",price:150,veg:false,desc:"4 chicken lollipops, spiced to perfection",img:"https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=400&q=80"},
+    {id:13,name:"Boneless Strips (3 pcs)",price:138,veg:false,desc:"Tender boneless crispy strips",img:"https://images.unsplash.com/photo-1562967914-608f82629710?w=400&q=80"},
+    {id:14,name:"Nuggets (7 pcs)",price:150,veg:false,desc:"7 juicy chicken nuggets",img:"https://images.unsplash.com/photo-1562967914-608f82629710?w=400&q=80"},
+    {id:15,name:"Bucket (10 pcs)",price:525,veg:false,desc:"10 pieces — party bucket!",img:"https://images.unsplash.com/photo-1626082927389-6cd097cee6a2?w=400&q=80"},
+    {id:16,name:"Chicken Popcorn",price:125,veg:false,desc:"Bite-sized crispy chicken popcorn",img:"https://images.unsplash.com/photo-1562967914-608f82629710?w=400&q=80"},
+  ],
+  "Twister": [
+    {id:17,name:"Chicken Twister",price:113,veg:false,desc:"Crispy chicken in a toasted wrap",img:"https://images.unsplash.com/photo-1587083650034-4dcf9473b51a?w=400&q=80"},
+    {id:18,name:"Chicken Seekh Kabab Wrap",price:125,veg:false,desc:"Seekh kabab wrapped with fresh veggies",img:"https://images.unsplash.com/photo-1587083650034-4dcf9473b51a?w=400&q=80"},
+    {id:19,name:"Chicken Popcorn Wrap",price:125,veg:false,desc:"Popcorn chicken in a flour wrap",img:"https://images.unsplash.com/photo-1587083650034-4dcf9473b51a?w=400&q=80"},
+    {id:20,name:"Veg Cheese Twister",price:75,veg:true,desc:"Cheese-filled veg twister wrap",img:"https://images.unsplash.com/photo-1587083650034-4dcf9473b51a?w=400&q=80"},
+  ],
+  "Pizza": [
+    {id:21,name:"Veg Pizza",price:150,veg:true,desc:"Fresh veggies on a cheesy pizza base",img:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80"},
+    {id:22,name:"Paneer Pizza",price:188,veg:true,desc:"Paneer tikka on a loaded pizza",img:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80"},
+    {id:23,name:"Tandoori Pizza",price:200,veg:false,desc:"Tandoori chicken on a spicy pizza",img:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80"},
+    {id:24,name:"Chicken Pizza",price:188,veg:false,desc:"Classic chicken topping pizza",img:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80"},
+  ],
+  "French Fries": [
+    {id:25,name:"French Fries",price:75,veg:true,desc:"Crispy golden French fries",img:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&q=80"},
+    {id:26,name:"Cheese French Fries",price:125,veg:true,desc:"Fries loaded with melted cheese",img:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&q=80"},
+    {id:27,name:"Peri-Peri French Fries",price:125,veg:true,desc:"Fries with spicy peri-peri seasoning",img:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&q=80"},
+  ],
+  "Momos": [
+    {id:28,name:"Veg Fry Momos (5 pcs)",price:75,veg:true,desc:"Crispy fried veg momos",img:"https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&q=80"},
+    {id:29,name:"Veg Steam Momos (6 pcs)",price:75,veg:true,desc:"Steamed veg momos with chutney",img:"https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&q=80"},
+    {id:30,name:"Fry Chicken Momos (5 pcs)",price:88,veg:false,desc:"Crispy chicken fried momos",img:"https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&q=80"},
+    {id:31,name:"Steam Chicken Momos (6 pcs)",price:88,veg:false,desc:"Steamed chicken momos",img:"https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&q=80"},
+  ],
+  "Biryani": [
+    {id:32,name:"Chicken Biryani",price:150,veg:false,desc:"Aromatic basmati chicken biryani",img:"https://images.unsplash.com/photo-1563379091339-03246963d651?w=400&q=80"},
+    {id:33,name:"Chicken Hyderabadi Biryani",price:175,veg:false,desc:"Dum style Hyderabadi biryani",img:"https://images.unsplash.com/photo-1563379091339-03246963d651?w=400&q=80"},
+    {id:34,name:"Mutton Biryani",price:200,veg:false,desc:"Rich and flavourful mutton biryani",img:"https://images.unsplash.com/photo-1563379091339-03246963d651?w=400&q=80"},
+  ],
+  "Sheermal": [
+    {id:35,name:"Sheermal (1 pc)",price:63,veg:true,desc:"Traditional sweet saffron bread",img:"https://images.unsplash.com/photo-1549931319-a545dcf3bc7c?w=400&q=80"},
+    {id:36,name:"Sheermal (4 pcs)",price:225,veg:true,desc:"4 pieces of classic sheermal",img:"https://images.unsplash.com/photo-1549931319-a545dcf3bc7c?w=400&q=80"},
+  ],
+  "Drinks": [
+    {id:37,name:"Cold Coffee",price:58,veg:true,desc:"Chilled creamy cold coffee",img:"https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&q=80"},
+    {id:38,name:"Cold Coffee with Ice Cream",price:100,veg:true,desc:"Cold coffee topped with ice cream",img:"https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&q=80"},
+    {id:39,name:"Oreo Shake",price:100,veg:true,desc:"Thick Oreo milkshake",img:"https://images.unsplash.com/photo-1534353473418-4cfa0c177e27?w=400&q=80"},
+    {id:40,name:"Vanilla Shake",price:100,veg:true,desc:"Classic creamy vanilla shake",img:"https://images.unsplash.com/photo-1534353473418-4cfa0c177e27?w=400&q=80"},
+    {id:41,name:"Orange Juice",price:63,veg:true,desc:"Fresh squeezed orange juice",img:"https://images.unsplash.com/photo-1534353473418-4cfa0c177e27?w=400&q=80"},
+    {id:42,name:"Lemon Soda",price:63,veg:true,desc:"Refreshing lemon soda",img:"https://images.unsplash.com/photo-1534353473418-4cfa0c177e27?w=400&q=80"},
+  ],
+};
+
+const combosData = [
+  {
+    badge:"VEG MBO'S", title:"Veg Combo 1",
+    items:["Veg Cheese Burger","French Fries","Cold Drinks"],
+    price:154, original:180
+  },
+  {
+    badge:"VEG MBO'S", title:"Veg Combo 2",
+    items:["Veg Grilled Sandwich","French Fries","Mojito"],
+    price:184, original:220
+  },
+  {
+    badge:"VEG MBO'S", title:"Veg Combo 3",
+    items:["Veg Cheese Twister","French Fries","Mojito"],
+    price:214, original:250
+  },
+  {
+    badge:"NON-VEG MBO'S", title:"Chicken Combo 1",
+    items:["Chicken Sandwich","French Fries","Cold Drinks 250ml"],
+    price:264, original:310
+  },
+  {
+    badge:"NON-VEG MBO'S", title:"Chicken Combo 2",
+    items:["Chicken Zinger Burger","French Fries","Mojito"],
+    price:204, original:240
+  },
+  {
+    badge:"NON-VEG SPL.", title:"Non-Veg Special",
+    items:["2 pc Lollipop","4 pc Nuggets","1 Zinger Burger","Colorinks 500ml"],
+    price:254, original:300
+  },
+  {
+    badge:"NON-VEG SPL.", title:"Mega Combo",
+    items:["2 pc Lollipop","4 pc Wings","1 Chicken Popcorn","Chicken Zinger","Colorinks 500ml"],
+    price:384, original:450
+  },
+  {
+    badge:"NON-VEG SPL.", title:"Party Bucket Combo",
+    items:["2 pc Crispy Fry Chicken","4 pc Lollipop","1 Wing","Buns","1 French Fries"],
+    price:684, original:800
+  },
+];
+
+const blogPosts = [
+  {tag:"Recipe Tips",title:"The Secret Behind Our Crispy Chicken — Revealed!",excerpt:"Ever wondered why our fried chicken is so perfectly crispy? It's all about the marination and the double-coating technique we've perfected over the years...",date:"Mar 5, 2025",img:"https://images.unsplash.com/photo-1626082927389-6cd097cee6a2?w=600&q=80"},
+  {tag:"Food Guide",title:"Best Burger Combos to Try at Al Baik Xpress",excerpt:"From the classic Zinger to the loaded Special Burger — here's our complete guide to finding your perfect burger match at Al Baik Xpress...",date:"Feb 20, 2025",img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80"},
+  {tag:"Health & Halal",title:"Why We Only Use 100% Halal Certified Meat",excerpt:"At Al Baik Xpress, we take our Halal certification seriously. Every piece of chicken we serve is sourced from certified Halal suppliers...",date:"Feb 10, 2025",img:"https://images.unsplash.com/photo-1562967914-608f82629710?w=600&q=80"},
+  {tag:"New Items",title:"Introducing Mutton Hyderabadi Biryani!",excerpt:"After months of perfecting the recipe, we're thrilled to announce the addition of Mutton Hyderabadi Biryani to our menu. Slow-cooked dum biryani...",date:"Jan 28, 2025",img:"https://images.unsplash.com/photo-1563379091339-03246963d651?w=600&q=80"},
+  {tag:"Community",title:"Al Baik Xpress — Serving Deoband Since 2018",excerpt:"We started as a small fast food counter near Muslim Fund and today we serve hundreds of customers daily. Here's our journey...",date:"Jan 15, 2025",img:"https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80"},
+  {tag:"Offers",title:"Special Ramadan Combos — Limited Time!",excerpt:"During the holy month of Ramadan, we're offering special Iftar combos with extra value meals. Get more for less this Ramadan...",date:"Jan 5, 2025",img:"https://images.unsplash.com/photo-1548943487-a2e4e43b4853?w=600&q=80"},
+];
+
+// ============================================================
+//  CART
+// ============================================================
+let cart = [];
+let selectedPayment = 'cod';
+
+function addToCart(id, name, price) {
+  const existing = cart.find(i => i.id === id);
+  if(existing) { existing.qty++; }
+  else { cart.push({id, name, price, qty:1}); }
+  updateCart();
+  showToast(`${name} added to cart! 🎉`);
+}
+
+function removeFromCart(id) {
+  const idx = cart.findIndex(i => i.id === id);
+  if(idx !== -1) {
+    if(cart[idx].qty > 1) cart[idx].qty--;
+    else cart.splice(idx,1);
+  }
+  updateCart();
+}
+
+function clearCart() {
+  cart = [];
+  updateCart();
+}
+
+function updateCart() {
+  const count = cart.reduce((s,i) => s+i.qty, 0);
+  const total = cart.reduce((s,i) => s+i.price*i.qty, 0);
+  document.getElementById('cartCount').textContent = count;
+
+  const itemsEl = document.getElementById('cartItems');
+  const summaryEl = document.getElementById('cartSummary');
+  const payEl = document.getElementById('paymentOptions');
+
+  if(cart.length === 0) {
+    itemsEl.innerHTML = '<div class="cart-empty"><div class="empty-icon">🛒</div><p>Your cart is empty.<br/>Add some delicious items!</p></div>';
+    summaryEl.style.display = 'none';
+    payEl.style.display = 'none';
+    return;
+  }
+
+  itemsEl.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-info">
+        <h5>${item.name}</h5>
+        <span>₹${item.price} each</span>
+      </div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="removeFromCart(${item.id})">−</button>
+        <span class="qty-num">${item.qty}</span>
+        <button class="qty-btn" onclick="addToCart(${item.id},'${item.name.replace(/'/g,"\\'")}',${item.price})">+</button>
+      </div>
+      <div class="cart-item-price">₹${item.price*item.qty}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('subtotalVal').textContent = `₹${total}`;
+  document.getElementById('totalVal').textContent = `₹${total}`;
+  summaryEl.style.display = 'block';
+  payEl.style.display = 'block';
+}
+
+function selectPayment(type) {
+  selectedPayment = type;
+  document.getElementById('cod').classList.toggle('selected', type==='cod');
+  document.getElementById('online').classList.toggle('selected', type==='online');
+}
+
+function openCheckout() {
+  if(cart.length === 0) { showToast('Cart is empty!'); return; }
+  const summary = cart.map(i => `<div class="item-line"><span>${i.name} × ${i.qty}</span><span>₹${i.price*i.qty}</span></div>`).join('');
+  const total = cart.reduce((s,i) => s+i.price*i.qty, 0);
+  document.getElementById('modalCartSummary').innerHTML = summary + `<div class="item-line"><span>Total</span><span>₹${total}</span></div>`;
+  document.getElementById('o_payment').value = selectedPayment;
+  document.getElementById('orderModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('orderModal').classList.remove('open');
+}
+
+function submitOrder() {
+  const name = document.getElementById('o_name').value.trim();
+  const phone = document.getElementById('o_phone').value.trim();
+  const address = document.getElementById('o_address').value.trim();
+  if(!phone) { showToast('⚠️ Phone number zaroori hai!'); return; }
+
+  const items = cart.map(i => `${i.name} ×${i.qty} = ₹${i.price*i.qty}`).join('\n');
+  const total = cart.reduce((s,i) => s+i.price*i.qty, 0);
+  const payment = document.getElementById('o_payment').value;
+
+  // Send email via mailto
+  const subject = `New Order - Al Baik Xpress`;
+  const body = `NEW ORDER\n\nCustomer: ${name||'Not provided'}\nPhone: ${phone}\nAddress: ${address||'Not provided'}\n\nItems:\n${items}\n\nTotal: ₹${total}\nPayment: ${payment==='cod'?'Cash on Delivery':'Online Payment'}\nNote: ${document.getElementById('o_note').value||'None'}`;
+  window.open(`mailto:Kaifsiddiqui28637@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+
+  // Also open WhatsApp
+  whatsappOrder();
+  closeModal();
+  cart = [];
+  updateCart();
+  showToast('🎉 Order placed! We\'ll call you shortly.');
+}
+
+function whatsappOrder() {
+  const items = cart.map(i => `• ${i.name} ×${i.qty} = ₹${i.price*i.qty}`).join('\n');
+  const total = cart.reduce((s,i) => s+i.price*i.qty, 0);
+  const name = document.getElementById('o_name')?.value || '';
+  const phone = document.getElementById('o_phone')?.value || '';
+  const address = document.getElementById('o_address')?.value || '';
+  const msg = `🍗 *NEW ORDER - AL BAIK XPRESS*\n\n👤 Name: ${name}\n📞 Phone: ${phone}\n📍 Address: ${address}\n\n🛒 *Items:*\n${items}\n\n💰 *Total: ₹${total}*\n💳 Payment: ${selectedPayment==='cod'?'Cash on Delivery':'Online Payment'}`;
+  window.open(`https://wa.me/919634950165?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// ============================================================
+//  RENDER FUNCTIONS
+// ============================================================
+function renderMenuCard(item, showOrderBtn=false) {
+  return `
+    <div class="menu-card">
+      <div class="menu-card-img" style="background-image:url('${item.img}')">
+        <div class="veg-badge ${item.veg?'veg':'nonveg'}"></div>
+      </div>
+      <div class="menu-card-body">
+        <h3>${item.name}</h3>
+        <p>${item.desc}</p>
+        <div class="menu-card-footer">
+          <span class="price">₹${item.price}</span>
+          <button class="add-btn" onclick="addToCart(${item.id},'${item.name.replace(/'/g,"\\'")}',${item.price});${showOrderBtn?'':''}">Add +</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderPopular() {
+  const popular = [1,9,17,21,32,28,25,37].map(id => {
+    for(const cat of Object.values(menuData)) {
+      const found = cat.find(i => i.id===id);
+      if(found) return found;
+    }
+  }).filter(Boolean);
+  document.getElementById('popularGrid').innerHTML = popular.map(i => renderMenuCard(i)).join('');
+}
+
+function renderCombos() {
+  document.getElementById('combosGrid').innerHTML = combosData.map(c => `
+    <div class="combo-card">
+      <div class="combo-badge">${c.badge}</div>
+      <h3>${c.title}</h3>
+      <ul class="combo-items">${c.items.map(it=>`<li>${it}</li>`).join('')}</ul>
+      <div class="combo-footer">
+        <div class="combo-price">₹${c.price} <span>₹${c.original}</span></div>
+        <button class="add-btn" onclick="addToCart(${Math.random()*1000|0},'${c.title.replace(/'/g,"\\'")}',${c.price})">Order</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderMenu() {
+  const categories = Object.keys(menuData);
+  const filterEl = document.getElementById('menuFilter');
+  filterEl.innerHTML = ['All',...categories].map((c,i) => `<button class="filter-btn ${i===0?'active':''}" onclick="filterMenu('${c}',this)">${c}</button>`).join('');
+
+  renderMenuByFilter('All');
+}
+
+let currentFilter = 'All';
+function filterMenu(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMenuByFilter(cat);
+}
+
+function renderMenuByFilter(cat) {
+  const content = document.getElementById('menuContent');
+  let html = '';
+  const categories = cat==='All' ? Object.keys(menuData) : [cat];
+  categories.forEach(c => {
+    html += `<div class="menu-section-title">${c}</div>`;
+    html += `<div class="menu-grid">${menuData[c].map(i=>renderMenuCard(i)).join('')}</div>`;
+  });
+  content.innerHTML = html;
+}
+
+function renderOrderGrid() {
+  const allItems = Object.values(menuData).flat();
+  document.getElementById('orderGrid').innerHTML = allItems.map(item => `
+    <div class="order-card">
+      <div class="order-card-img" style="background-image:url('${item.img}');background-size:cover;background-position:center;border-radius:10px;width:70px;height:70px;"></div>
+      <div class="order-card-info">
+        <h4>${item.name}</h4>
+        <span>${item.desc.substring(0,40)}...</span>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;">
+          <span class="order-card-price">₹${item.price}</span>
+          <button class="add-btn" onclick="addToCart(${item.id},'${item.name.replace(/'/g,"\\'")}',${item.price})">Add +</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderBlog() {
+  document.getElementById('blogGrid').innerHTML = blogPosts.map(post => `
+    <div class="blog-card">
+      <div class="blog-card-img" style="background-image:url('${post.img}')"></div>
+      <div class="blog-card-body">
+        <span class="blog-tag">${post.tag}</span>
+        <h3>${post.title}</h3>
+        <p>${post.excerpt}</p>
+        <div class="blog-meta">
+          <span>📅 ${post.date}</span>
+          <a class="blog-read-btn" href="#">Read more →</a>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ============================================================
+//  CONTACT FORM
+// ============================================================
+function sendContactForm() {
+  const name = document.getElementById('cf_name').value.trim();
+  const phone = document.getElementById('cf_phone').value.trim();
+  const email = document.getElementById('cf_email').value.trim();
+  const message = document.getElementById('cf_message').value.trim();
+  if(!message){ showToast('⚠️ Please write a message'); return; }
+
+  const subject = `Message from ${name||'Website Visitor'} - Al Baik Xpress`;
+  const body = `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\n\nMessage:\n${message}`;
+  window.open(`mailto:Kaifsiddiqui28637@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+  showToast('✅ Message sent successfully!');
+  document.getElementById('cf_name').value='';
+  document.getElementById('cf_phone').value='';
+  document.getElementById('cf_email').value='';
+  document.getElementById('cf_message').value='';
+}
+
+function contactWhatsApp() {
+  const name = document.getElementById('cf_name').value||'Customer';
+  const msg = document.getElementById('cf_message').value||'Hello, I want to get in touch!';
+  window.open(`https://wa.me/919634950165?text=${encodeURIComponent(`Hi Al Baik Xpress!\n\nName: ${name}\nMessage: ${msg}`)}`, '_blank');
+}
+
+// ============================================================
+//  HERO SLIDER  — 3 second auto-advance + Ken Burns + progress bar
+// ============================================================
+let currentSlide = 0;
+const totalSlides = 4;
+const SLIDE_DURATION = 3000; // 3 seconds
+let sliderTimer = null;
+let progressTimer = null;
+
+function initSlider() {
+  const dots = document.getElementById('slideDots');
+  for(let i=0;i<totalSlides;i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i===0?' active':'');
+    d.onclick = () => { goToSlide(i); resetAutoSlide(); };
+    dots.appendChild(d);
+  }
+  // Mark first slide active for Ken Burns
+  document.querySelectorAll('.slide')[0].classList.add('active-slide');
+  startProgress();
+  startAutoSlide();
+}
+
+function goToSlide(n) {
+  // Remove active-slide from all
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active-slide'));
+  currentSlide = (n + totalSlides) % totalSlides;
+  document.getElementById('slides').style.transform = `translateX(-${currentSlide * 100}%)`;
+  document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i === currentSlide));
+  // Trigger Ken Burns on new active slide
+  const activeEl = document.querySelectorAll('.slide')[currentSlide];
+  activeEl.classList.add('active-slide');
+  // Restart progress bar
+  startProgress();
+}
+
+function startProgress() {
+  const bar = document.getElementById('slideProgress');
+  // Reset
+  bar.style.transition = 'none';
+  bar.style.width = '0%';
+  bar.classList.remove('running');
+  // Trigger reflow then animate
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      bar.style.transition = `width ${SLIDE_DURATION}ms linear`;
+      bar.style.width = '100%';
+    });
+  });
+}
+
+function startAutoSlide() {
+  sliderTimer = setInterval(() => goToSlide(currentSlide + 1), SLIDE_DURATION);
+}
+
+function resetAutoSlide() {
+  clearInterval(sliderTimer);
+  startAutoSlide();
+}
+
+function changeSlide(dir) { goToSlide(currentSlide + dir); resetAutoSlide(); }
+
+// ============================================================
+//  PAGE ROUTER
+// ============================================================
+function showPage(name, linkEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  if(linkEl) linkEl.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('navLinks').classList.remove('open');
+}
+
+// ============================================================
+//  TOAST
+// ============================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  initSlider();
+  renderPopular();
+  renderCombos();
+  renderMenu();
+  renderOrderGrid();
+  renderBlog();
+});
+</script>
+</body>
+</html>
